@@ -1279,4 +1279,53 @@ ul.description li {
     justify-content: space-between;
   }
   
-  
+  /* logo oeil  */
+
+  /* styles.css */
+.logo {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: #f0f0f03c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: auto; /* Centre le logo sur la page */
+}
+
+.eye {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: rgba(64, 220, 255, 0.504);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.pupil {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: black;
+    position: absolute;
+}
+/* Media queries pour ajuster la taille du logo sur les petits écrans */
+@media (max-width: 600px) {
+    .logo {
+        width: 80vw;
+        height: 80vw;
+    }
+
+    .eye {
+        width: 40vw;
+        height: 40vw;
+    }
+
+    .pupil {
+        width: 12vw;
+        height: 12vw;
+    }
+}

@@ -6,6 +6,28 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
 
 const HomePage = () => {
+
+
+  // scripts.js
+document.addEventListener('mousemove', (event) => {
+    const eye = document.querySelector('.eye');
+    const pupil = document.querySelector('.pupil');
+    const eyeRect = eye.getBoundingClientRect();
+    const pupilRect = pupil.getBoundingClientRect();
+
+    const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+    const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+
+    const angle = Math.atan2(event.clientY - eyeCenterY, event.clientX - eyeCenterX);
+    const radius = (eyeRect.width / 2) - (pupilRect.width / 2);
+
+    const pupilX = eyeCenterX + radius * Math.cos(angle) - eyeRect.left - (pupilRect.width / 2);
+    const pupilY = eyeCenterY + radius * Math.sin(angle) - eyeRect.top - (pupilRect.height / 2);
+
+    pupil.style.left = `${pupilX}px`;
+    pupil.style.top = `${pupilY}px`;
+});
+
     //--------------------------------------inscription-------------------
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,11 +86,18 @@ const HomePage = () => {
 
     return (
         <div>
- 
-        {/* // ------------HomePage------------ */}
+
+            {/* // ------------HomePage------------ */}
 
             <div className="container">
                 <div className={`img ${isScrolled ? "scrolled-container" : ""}`}>
+
+                    <div class="logo">
+                        <div class="eye">
+                            <div class="pupil"></div>
+                        </div>
+                    </div>
+
                     <h1 className="head-title">KALLOS VISION</h1>
                     <div className="head-text">
                         <p>
