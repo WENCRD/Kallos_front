@@ -3,6 +3,11 @@ import axios from "axios";
 
 
     // Modifier les infos d'un mannequin
+    function  getAllMannequins() {
+        return axios.get(`http://localhost:3000/mannequins/all`);
+    }
+
+    // Modifier les infos d'un mannequin
     function updatePhotographe(id_mannequin) {
         return axios.post(`http://localhost:3000/users/updatePhotographe/${id_mannequin}`);
     }
@@ -29,5 +34,6 @@ export default {
      updatePhotographe,
      getMannequin,
      addMannequin,
-     deleteMannequin
+     deleteMannequin,
+     getAllMannequins
 };

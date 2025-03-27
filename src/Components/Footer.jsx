@@ -33,7 +33,7 @@ function Footer () {
           </form>
         </div>
         <div className="footer-section social">
-          <img src="src/img/kallos_oeil.png" alt="Kallos Vision Logo" className="logo" />
+          <img src="src/img/Kallos_Vision Logo.png" alt="Kallos Vision Logo" className="logo" />
           <div className="social-icons">
             <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><img src="src/img/Kallos_facebook (2).png" alt="Instagram" /></a>
             <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><img src="src/img/Kallos_facebook.png" alt="Facebook" /></a>

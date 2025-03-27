@@ -75,8 +75,7 @@ const SignInModal = ({ children, onClose }) => {
 
                 {currentSection === 1 && (
                     <>
-                        {children}
-
+                      
                         <h2>INSCRIPTION</h2>
                         <form onSubmit={handleSubmit}>
                             <div className="form-row">
@@ -130,6 +129,7 @@ const SignInModal = ({ children, onClose }) => {
 
                 {currentSection === 2 && (
                     <>
+                      <h2>Informations Personnelles</h2>
                        <form onSubmit={handleSubmit}>
                             <div className="form-row">
                             <div className="form-group">

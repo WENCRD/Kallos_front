@@ -6,15 +6,13 @@ import PhotographeService from "../Services/PhotographeService";
 import MannequinService from "../Services/MannequinService";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-
 const ProfilePage = () => {
   const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [profileData, setProfileData] = useState({});
-  const [activeSection, setActiveSection] = useState("profile");
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDays, setSelectedDays] = useState([]);
+  const [profilePhotos, setProfilePhotos] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -47,144 +45,122 @@ const ProfilePage = () => {
     }
   };
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
   const toggleDay = (day) => {
     setSelectedDays((prevDays) =>
       prevDays.includes(day) ? prevDays.filter((d) => d !== day) : [...prevDays, day]
     );
   };
 
-  const handleUpdate = async () => {
-    try {
-      const userId = userData.id_user || userData.id;
-      const updatedProfile = { ...profileData, availability: selectedDays };
-
-      if (userData.type === "mannequin") {
-        await MannequinService.updateMannequin(userId, updatedProfile);
-      } else if (userData.type === "photographe") {
-        await PhotographeService.updatePhotographe(userId, updatedProfile);
-      }
-
-      setProfileData(updatedProfile);
-      toggleModal();
-    } catch (error) {
-      console.error("Erreur lors de la mise à jour :", error);
+  const handleUploadPhoto = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePhotos((prevPhotos) => [...prevPhotos, reader.result]); 
+      };
+      reader.readAsDataURL(file);
     }
+  };
+
+  const handleDeletePhoto = (index) => {
+    setProfilePhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index)); 
   };
 
   if (!userData) return <p>Chargement...</p>;
 
   return (
-    <div className="container">
+    <div className="my-container">
       <header className="text-center py-4 header">
         <h1 className="head-title">KALLOS VISION</h1>
-        <div className="text-center">
-          <img src="src/img/kallos_oeil.png" alt="User Avatar" className="rounded-circle avatar" />
-          <h2 className="mt-2">{userData.username || "Nom d'utilisateur"}</h2>
-          <p className="text-muted">{userData.type || "Type d'utilisateur"}</p>
-          <button onClick={toggleModal} className="btn">Modifier mon profil</button>
-        </div>
+        <h2 className="mt-2">{userData.username || "Nom d'utilisateur"}</h2>
+        <p className="text-muted">{userData.type || "Type d'utilisateur"}</p>
       </header>
 
-      {/* Boutons Profil et Messages */}
-      <div className="nav-buttons">
-        <button onClick={() => setActiveSection("profile")} className={`btn ${activeSection === "profile" ? "btn-primary" : "btn-outline-primary"}`}>
-          Profil
-        </button>
-        <button onClick={() => setActiveSection("messages")} className={`btn ${activeSection === "messages" ? "btn-primary" : "btn-outline-primary"}`}>
-          Messages
-        </button>
+      {/* Disponibilité */}
+      <div className="availability">
+        <h3>Disponibilité</h3>
+        <div className="availability-days">
+          {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((day) => (
+            <button key={day} className={selectedDays.includes(day) ? "active" : ""} onClick={() => toggleDay(day)}>
+              {day}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Contenu dynamique */}
-      <div className="dynamic-content">
-        {activeSection === "profile" && (
-          <>
-            <div className="profile-sections">
-              <div className="section-box">
-                <h3>À propos</h3>
-                <p>Ville : {profileData.location || "Non spécifié"}</p>
-                <p>Langue : {profileData.language || "Non spécifié"}</p>
+      {/* Sections */}
+      <div className="profile-sections">
+        <div className="section-box">
+          <h3>À propos</h3>
+          <p>Ville : {profileData.location || "Non spécifié"}</p>
+          <p>Langue : {profileData.language || "Non spécifié"}</p>
+          {userData.type === "mannequin" && <p>Agence : {profileData.agency || "Non spécifié"}</p>}
+        </div>
 
-                {userData.type === "mannequin" && <p>Agence : {profileData.agency || "Non spécifié"}</p>}
-              </div>
+        <div className="section-box">
+          <h3>Professionnelles</h3>
+          <p>Expérience : {profileData.experience || "Non spécifié"}</p>
+          <p>Portfolio : {profileData.portfolio || "Non spécifié"}</p>
+          <p>Localisation : {profileData.location || "Non spécifié"}</p>
+        </div>
 
-              <div className="section-box">
-                <h3>Professionnelles</h3>
-                <p>Expérience : {profileData.experience || "Non spécifié"}</p>
-                <p>Portfolio : {profileData.portfolio || "Non spécifié"}</p>
-                <p>localisation : {profileData.location || "Non spécifié"}</p>
-              </div>
-              <div className="section-box">
-
-                <h3>Corps</h3>
-                {userData.type === "mannequin" ? (
-                  <>
-                    <p>Taille : {profileData.height || "Non spécifiée"}</p>
-                    <p>Yeux : {profileData.eye_color || "Non spécifiée"}</p>
-                    <p>Cheveux : {profileData. hair_color || "Non spécifiée"}</p>
-                    <p>Poitrine : {profileData.bust_size || "Non spécifiée"}</p>
-                    <p>Tour de hanches : {profileData.hips_size || "Non spécifiée"}</p>
-                    <p>Tour de taille : {profileData.waist_size || "Non spécifiée"}</p>
-                    <p>Pointure : {profileData. shoe_size || "Non spécifiée"}</p>
-                  </>
-                ) : (
-                  <>
-                    <p>Appareil photo : {profileData.camera || "Non spécifié"}</p>
-                    <p>Style : {profileData.style || "Non spécifié"}</p>
-                  </>
-                )}
-              </div>
-            </div>
-
-            {/* Galerie de photos */}
-            <div className="photo-section">
-              <h3>Photos</h3>
-              <div className="photo-grid">
-                {[profileData.photo1, profileData.photo2, profileData.photo3, profileData.photo4, profileData.photo5].map(
-                  (photo, index) =>
-                    photo && <img key={index} src={photo} alt={`photo${index + 1}`} />
-                )}
-              </div>
-            </div>
-
-            {/* Disponibilité */}
-            <div className="availability">
-              <h3>Disponibilité</h3>
-              <div className="availability-days">
-                {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((day) => (
-                  <button key={day} className={selectedDays.includes(day) ? "active" : ""} onClick={() => toggleDay(day)}>
-                    {day}
-                  </button>
-                ))}
-              </div>
-              <button className="btn btn-outline-primary" onClick={toggleModal}>Modifier</button>
-            </div>
-          </>
-        )}
-        {activeSection === "messages" && <h3>Messagerie à venir...</h3>}
+        <div className="section-box">
+          <h3>Corps</h3>
+          {userData.type === "mannequin" ? (
+            <>
+              <p>Taille : {profileData.height || "Non spécifiée"}</p>
+              <p>Yeux : {profileData.eye_color || "Non spécifiée"}</p>
+              <p>Cheveux : {profileData.hair_color || "Non spécifiée"}</p>
+              <p>Poitrine : {profileData.bust_size || "Non spécifiée"}</p>
+              <p>Tour de hanches : {profileData.hips_size || "Non spécifiée"}</p>
+              <p>Tour de taille : {profileData.waist_size || "Non spécifiée"}</p>
+              <p>Pointure : {profileData.shoe_size || "Non spécifiée"}</p>
+            </>
+          ) : (
+            <>
+              <p>Appareil photo : {profileData.camera || "Non spécifié"}</p>
+              <p>Style : {profileData.style || "Non spécifié"}</p>
+            </>
+          )}
+        </div>
       </div>
 
-      {/* Modal de modification */}
-      {isModalOpen && (
-        <div className="modal show">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5>Modifier disponibilité</h5>
-                <button className="btn-close" onClick={toggleModal}></button>
+      {/* Section Photos */}
+      <div className="container mx-auto px-4 py-8">
+        <div className="bg-white p-4 border-2 border-gray-300 rounded-lg shadow-md">
+          <h3 className="text-lg font-bold mb-2">Photos</h3>
+
+          {/* 🔹 Conteneur flex pour les images (max 5 par ligne) */}
+          <div className="">
+            {profilePhotos.map((photo, index) => (
+              <div key={index} className="grid grid-cols-5 gap-2 p-2relative w-24 h-24 border border-gray-300 rounded-md overflow-hidden">
+                <img src={photo} alt={`photo-${index}`} className="w-full h-full object-cover" />
+                <button
+                  className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded"
+                  onClick={() => handleDeletePhoto(index)}
+                >
+                  ✕
+                </button>
               </div>
-              <div className="modal-footer">
-                <button className="btn btn-primary" onClick={handleUpdate}>Enregistrer</button>
-                <button className="btn btn-secondary" onClick={toggleModal}>Annuler</button>
+            ))}
+
+            {/* 📌 Bouton "Ajouter une photo" (s'affiche si < 5 photos) */}
+            {profilePhotos.length < 5 && (
+              <div className="w-24 h-24 border-2 border-dashed border-gray-400 flex items-center justify-center rounded-md">
+                <input type="file" accept="image/*" className="hidden" id="upload-photo" onChange={handleUploadPhoto} />
+                <label htmlFor="upload-photo" className="cursor-pointer text-gray-500 text-sm">
+                  + Ajouter
+                </label>
               </div>
-            </div>
+            )}
+          </div>
+
+          {/* 🔹 Bouton Modifier aligné à droite */}
+          <div className="flex justify-end mt-2">
+            <button className="text-sm text-blue-500 font-semibold">Modifier</button>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

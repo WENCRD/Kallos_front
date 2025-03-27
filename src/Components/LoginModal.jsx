@@ -63,7 +63,7 @@ const LoginModal = ({ onClose, onSignUp }) => {
         <div className="login-container">
           {/* Logo centré */}
           <div className="logo">
-            <img src="src/img/kallos_oeil.png" alt="Logo" className="logo-img" />
+            <img src="src/img/Kallos_Vision Logo.png" alt="Logo" className="logo-img" />
             <h1 className="welcom">Bienvenue sur Kallos Vision</h1>
           </div>
 
@@ -71,7 +71,7 @@ const LoginModal = ({ onClose, onSignUp }) => {
           <div className="social-login">
             <h2>Se connecter avec</h2>
             <button className="btn-facebook">
-              <img src="/img/Kallos_facebook.png" alt="Facebook" className="social-icon" />
+              <img src="src/img/Kallos_facebook.png" alt="Facebook" className="social-icon" />
               Facebook
             </button>
             <p>ou</p>

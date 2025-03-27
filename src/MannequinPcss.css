@@ -1,0 +1,91 @@
+/* Conteneur des cartes */
+.mannequin-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Espacement entre les cartes */
+  padding: 24px; /* Espacement autour */
+  justify-content: center; /* Centre les cartes */
+  max-width: 1200px; /* Largeur maximale pour éviter une extension excessive sur écran large */
+  margin: 0 auto; /* Centre le conteneur sur la page */
+}
+
+/* Carte individuelle */
+.mannequin-card {
+  flex: 1 1 calc(25% - 16px); /* 4 cartes par ligne avec espacement */
+  max-width: calc(25% - 16px); /* Largeur maximale */
+  box-sizing: border-box; /* Inclut padding et bordure dans la largeur totale */
+  background-color: rgba(138, 132, 132, 0.657);
+  border: 1px solid #e5e7eb; /* Bordure légère */
+  border-radius: 8px; /* Coins arrondis */
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre subtile */
+  transition: transform 0.2s, box-shadow 0.2s; /* Animation au survol */
+}
+
+/* Image de la carte */
+.mannequin-card img {
+  display: block;
+  margin: 0; /* Supprime tout centrage horizontal */
+  width: 80%;
+  height: 200px; /* Hauteur fixe pour uniformité */
+  object-fit: cover; /* Adapte l'image au conteneur sans déformation */
+  border-bottom: 1px solid #e5e7eb; /* Séparation entre l'image et le contenu */
+  /* transform: translateX(-2%); /* Décalage vers la gauche */
+} */
+
+/* Contenu de la carte */
+.mannequin-card .card-content {
+  padding: 16px;
+  text-align: center;
+  font-size: 14px; /* Taille de texte plus compacte */
+  color: #333;
+}
+
+/* Animation au survol */
+.mannequin-card:hover {
+  transform: translateY(-5px); /* Légère élévation */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* Ombre plus marquée */
+}
+
+/* Styles pour petits écrans (responsive) */
+@media (max-width: 768px) {
+  .mannequin-card {
+    flex: 1 1 calc(50% - 16px); /* 2 cartes par ligne sur écrans moyens */
+  }
+}
+
+/* Styles pour très petits écrans (smartphones) */
+@media (max-width: 480px) {
+  .mannequin-card {
+    flex: 1 1 100%; /* 1 carte par ligne sur les petits écrans */
+  }
+}
+
+
+/* bouton */
+.boutons-filtrage {
+  display: flex; /* Utiliser Flexbox */
+  justify-content: center; /* Centre les boutons horizontalement */
+  align-items: center; /* Centre les boutons verticalement dans leur conteneur */
+  gap: 16px; /* Espacement uniforme entre les boutons */
+  background-color: white; /* Fond blanc pour la bande */
+  padding: 16px; /* Espacement autour des boutons */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre subtile pour démarquer la bande */
+  position: sticky; /* Reste en haut lors du scroll */
+  top: 0;
+  z-index: 50; /* Superposition au-dessus du contenu */
+}
+.bouton-filtre {
+  padding: 8px 16px;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #f9f9f9;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+.bouton-filtre:hover {
+  background: #1d1c1c;
+  border-color: #ccc;
+  color: #333;
+}

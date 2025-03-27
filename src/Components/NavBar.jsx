@@ -1,10 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-// import { NavDropdown } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import AuthContext from "../Context/AuthContext";
 import AuthService from "../Services/AuthService";
 import { jwtDecode } from "jwt-decode";
@@ -12,15 +11,14 @@ import LoginModal from "./LoginModal";
 import SignInModal from "./SignInModal";
 
 function NavBar() {
-  const { isAuthenticated, setIsAuthenticated, setUsername } =
-    useContext(AuthContext);
+  const { isAuthenticated, setIsAuthenticated, setUsername } = useContext(AuthContext);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [isScrolled, setIsScrolled] = useState(false);
   const [modalType, setModalType] = useState(null);
+
   const openModal = (type) => setModalType(type);
   const closeModal = () => setModalType(null);
-
 
   // ------------------------------------scrollNavbar ----------------------
   useEffect(() => {
@@ -50,7 +48,6 @@ function NavBar() {
 
   //----------------Fonction pour toruver le username a partir du token en le décodant------------
   function getUsernameFromToken(token) {
-
     if (!token) return null;
     try {
       const decoded = jwtDecode(token);
@@ -60,24 +57,20 @@ function NavBar() {
       return null;
     }
   }
- const decodedUsername = getUsernameFromToken(token);
+  const decodedUsername = getUsernameFromToken(token);
+
   //-------------------------------NavBar-------------------------------------------
   return (
     <>
-      <Navbar collapseOnSelect expand="lg"
-        className={`custom-navbar ${isScrolled ? "scrolled" : ""}`}>
-
-
+      <Navbar collapseOnSelect expand="lg" className={`custom-navbar ${isScrolled ? "scrolled" : ""}`}>
         <Container>
-
-
           {/* Logo */}
           <Navbar.Brand>
             <Link to="/">
               <img
                 alt="logo"
-                src="src/img/kallos_oeil.png"
-                width="80"
+                src="src/img/Kallos_Vision Logo.png"
+                width="60"
                 className="logo-navbar"
               />
             </Link>
@@ -90,15 +83,16 @@ function NavBar() {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="ml-auto nav-right">
               <div>
-
+                <Link to="/a propos" className="nav-link">
+                  À propos
+                </Link>
+                <Link to="/tarifs" className="nav-link">
+                  Nos tarifs
+                </Link>
+                <Link to="/mannequins" className="nav-link">
+                  Mannequins
+                </Link>
               </div>
-
-              <Link to="/jeux" className="nav-link">
-                À propos
-              </Link>
-              <Link to="/tarifs" className="nav-link">
-                Nos tarifs
-              </Link>
 
               {/* Gestion de l'authentification */}
               {!isAuthenticated ? (
@@ -108,7 +102,7 @@ function NavBar() {
 
                   {modalType === "signup" && (
                     <SignInModal onClose={closeModal}>
-                      <h1>Informations Personnelles</h1>
+                    
                     </SignInModal>
                   )}
 
@@ -132,7 +126,6 @@ function NavBar() {
               )}
             </Nav>
           </Navbar.Collapse>
-
         </Container>
       </Navbar>
     </>
