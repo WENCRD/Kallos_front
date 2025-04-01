@@ -13,7 +13,8 @@ import SignInModal from "./SignInModal";
 function NavBar() {
   const { isAuthenticated, setIsAuthenticated, setUsername } = useContext(AuthContext);
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");  
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [modalType, setModalType] = useState(null);
 
@@ -36,6 +37,7 @@ function NavBar() {
   //-------------------------------décodé le username a partir du token----------------------------
 
   const username = token ? jwtDecode(token).username : null;
+ 
 
   //-------------------------------Fonction pour se déco-------------------------------------------
 
@@ -49,8 +51,10 @@ function NavBar() {
   //----------------Fonction pour toruver le username a partir du token en le décodant------------
   function getUsernameFromToken(token) {
     if (!token) return null;
+  
     try {
       const decoded = jwtDecode(token);
+      
       return decoded.username; // Retourne le nom d'utilisateur
     } catch (error) {
       console.error("Erreur lors du décodage du token:", error);
@@ -82,7 +86,7 @@ function NavBar() {
           {/* Liens de navigation */}
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="ml-auto nav-right">
-              <div>
+              
                 <Link to="/a propos" className="nav-link">
                   À propos
                 </Link>
@@ -92,7 +96,7 @@ function NavBar() {
                 <Link to="/mannequins" className="nav-link">
                   Mannequins
                 </Link>
-              </div>
+              
 
               {/* Gestion de l'authentification */}
               {!isAuthenticated ? (
@@ -133,3 +137,6 @@ function NavBar() {
 }
 
 export default NavBar;
+
+
+

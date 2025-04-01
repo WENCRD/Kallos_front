@@ -4,10 +4,13 @@ import { useNavigate } from 'react-router-dom';
 
 const SignInModal = ({ children, onClose }) => {
     const navigate = useNavigate();
-    //   const [Users, setUsers] = useState([]);
+    const [currentSection, setCurrentSection] = useState(1);
 
     const [email, setemail] = useState("");
     const [password, setpassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [type, settype] = useState("");
+    
     const [first_name, setfirst_name] = useState("");
     const [last_name, setlast_name] = useState("");
     const [phone, setphone] = useState("");
@@ -15,57 +18,45 @@ const SignInModal = ({ children, onClose }) => {
     const [adress, setadress] = useState("");
     const [postal_code, setpostal_code] = useState("");
     const [date_of_birth, setdate_of_birth] = useState("");
-    const [type, settype] = useState("");
+
     const [city, setcity] = useState("");
     const [username, setusername] = useState("");
 
-
-
     const handleSubmit = async (e) => {
-        console.log("test");
         e.preventDefault();
-        console.log('Connexion avec:', { email, password });
+        console.log("📩 handleSubmit a bien été appelé !");
 
         try {
-            console.log(username,email, password, first_name, last_name, sex, city, adress, postal_code, phone, date_of_birth, type);
-            //  mettre a la place de booking service page profil ?
-            const response = await UsersService.getSign({
+            const response = await UsersService.postSign({
                 email,
                 password,
                 first_name,
+                last_name,
+                phone,
                 sex,
-                city,
                 adress,
                 postal_code,
-                phone,
                 date_of_birth,
-                last_name,
                 type,
-                username
-
+                city,
+                username,
             });
+            
             console.log(response.data);
-            // mettre la navigate vers profil
-            console.log("Fermeture du modal déclenchée");
-            onClose(); 
-            navigate("/");
+            if (response.data) {
+                onClose();
+                navigate("/ProfilePage");
+            } else {
+                alert("Erreur lors de l'inscription. Réessayez !");
+            }
         } catch (error) {
-            console.log(error);
+            console.error("Erreur lors de la soumission :", error);
+            alert("Une erreur est survenue. Veuillez réessayer !");
         }
     };
 
-
-    // État pour suivre la section actuelle
-    const [currentSection, setCurrentSection] = useState(1);
-    // Passer à la section suivante
-    const handleNext = () => {
-        setCurrentSection((prevSection) => prevSection + 1);
-    };
-
-    const handlePrevious = () => {
-        setCurrentSection((prevSection) => Math.max(prevSection - 1, 1)); // Revenir à la section précédente
-    };
-
+    const handleNext = () => setCurrentSection((prev) => prev + 1);
+    const handlePrevious = () => setCurrentSection((prev) => Math.max(prev - 1, 1));
     return (
         <div className="modal-overlay">
             <div className="modal-content">
@@ -75,7 +66,7 @@ const SignInModal = ({ children, onClose }) => {
 
                 {currentSection === 1 && (
                     <>
-                      
+
                         <h2>INSCRIPTION</h2>
                         <form onSubmit={handleSubmit}>
                             <div className="form-row">
@@ -93,7 +84,7 @@ const SignInModal = ({ children, onClose }) => {
                                         settype(e.target.value)}
                                         value={type}
                                         id="account-type">
-                                        <option value="admin">Sélectionner</option>
+                                        <option value="">Sélectionner</option>
                                         <option value="mannequin">Mannequin</option>
                                         <option value="photographe">Photographe</option>
                                     </select>
@@ -103,10 +94,9 @@ const SignInModal = ({ children, onClose }) => {
                                 <div className="form-group">
                                     <label
                                         name="password" >Saisissez votre mot de passe*</label>
-                                    <input required={true} onChange={(e) =>
-                                        setpassword(e.target.value)}
-                                        value={password}
-                                        type="password" id="password" placeholder="Mot de passe" />
+                                    <input required onChange={(e) => setConfirmPassword(e.target.value)}
+                                        value={confirmPassword}
+                                        type="password" id="confirm-password" placeholder="Confirmer mot de passe" />
                                 </div>
                                 <div className="form-group">
                                     <label
@@ -117,7 +107,7 @@ const SignInModal = ({ children, onClose }) => {
                                         type="password" id="confirm-password" placeholder="Confirmer mot de passe" />
                                 </div>
                             </div>
-                        
+
                             <div className="form-navigation">
                                 <button type="button" className="btn" onClick={handleNext}>
                                     Suivant
@@ -129,10 +119,10 @@ const SignInModal = ({ children, onClose }) => {
 
                 {currentSection === 2 && (
                     <>
-                      <h2>Informations Personnelles</h2>
-                       <form onSubmit={handleSubmit}>
+                        <h2>Informations Personnelles</h2>
+                        <form onSubmit={handleSubmit}>
                             <div className="form-row">
-                            <div className="form-group">
+                                <div className="form-group">
                                     <label name="username">Username*</label>
                                     <input required onChange={(e) =>
                                         setusername(e.target.value)}
@@ -147,8 +137,8 @@ const SignInModal = ({ children, onClose }) => {
                                         value={first_name}
                                         type="text" id="name" placeholder="Votre nom" />
                                 </div>
-                     
-                               
+
+
 
                                 <div className="form-group">
                                     <label name="firstname">Prénom*</label>
@@ -169,11 +159,11 @@ const SignInModal = ({ children, onClose }) => {
                                         type="date" id="dob" />
                                 </div>
                                 <div className="form-group">
-                                    <label 
+                                    <label
                                         name="gender">Sexe*</label>
-                                    <select required={true} onChange={(e) => 
+                                    <select required={true} onChange={(e) =>
                                         setsex(e.target.value)}
-                                         value={sex}
+                                        value={sex}
                                         id="gender">
                                         <option value="">Sélectionner</option>
                                         <option value="homme">male</option>
@@ -247,27 +237,24 @@ const SignInModal = ({ children, onClose }) => {
                 )}
 
                 {currentSection === 3 && (
-                    <>
-                    <form onSubmit={handleSubmit}> 
-                        <h2>INSCRIPTION</h2>
-                        <h3>Confirmation</h3>
-                        <p>Merci de vérifier vos informations avant de soumettre.</p>
+                    <form onSubmit={handleSubmit}>
+                        <h2>Confirmation</h2>
                         <div className="form-navigation">
                             <button type="button" className="btn" onClick={handlePrevious}>
                                 Précédent
                             </button>
-                            <button type="submit" className="btn" onClick={onClose()}>
+                            <button type="submit" className="btn" >
                                 Terminer
                             </button>
                         </div>
-                   </form> 
-                   </>
-                    
+                    </form>
                 )}
-                
             </div>
 
+
         </div>
+
+
     );
 };
 

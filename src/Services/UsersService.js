@@ -10,20 +10,66 @@ function addBooking(booking) {
     return axios.post(`http://localhost:3000/users/Booking/addBooking`, booking);
 }
 
-//  Connexion d'un utilisateur
-function getUsers(users) {
-    return axios.post(`http://localhost:3000/users/LoginPage`, users);
+// ✅ Vérifie que getCsrfToken est défini UNE SEULE FOIS
+async function getCsrfToken() {
+    const response = await axios.get("http://localhost:3000/csrf-token", { withCredentials: true });
+    return response.data.csrfToken;
 }
 
-//  Inscription d'un utilisateur
-function getSign(sign) {
-    return axios.post(`http://localhost:3000/users/users/SigninPage`, sign);
+// 🔹 Connexion d'un utilisateur
+async function postLogin(data) {
+    const csrfToken = await getCsrfToken();
+    console.log("🚀 Token CSRF utilisé:", csrfToken);
+    console.log("📩 Données envoyées:", data);
+
+    return axios.post("http://localhost:3000/users/LoginPage", {
+        email: data.email,
+        password: data.password // 🔹 Changer password_hash en password
+    }, {
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken
+        },
+        withCredentials: true
+    }).catch(err => {
+        console.error("❌ Erreur login:", err.response?.data || err);
+    });
 }
 
-//  Connexion (nouvelle API)
-function getlogin(user) {
-    return axios.post("http://localhost:3000/users/connexion", user);
+
+// 🔹 Inscription d'un utilisateur
+async function postSign(data) {
+    const csrfToken = await getCsrfToken();
+    console.log("🚀 Token CSRF utilisé:", csrfToken);
+    console.log("📩 Données envoyées pour inscription :", data);
+
+    return axios.post("http://localhost:3000/users/SigninPage", {
+        email: data.email,
+        password: data.password, // 🔹 Vérifier que le backend attend bien `password`
+        username: data.username,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        phone: data.phone,
+        sex: data.sex,
+        adress: data.adress,
+        postal_code: data.postal_code,
+        date_of_birth: data.date_of_birth,
+        type: data.type,
+        city: data.city
+    }, {
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken
+        },
+        withCredentials: true
+    }).then(response => {
+        console.log("✅ Réponse du serveur :", response.data);
+        return response.data;
+    }).catch(err => {
+        console.error("❌ Erreur inscription :", err.response?.data || err);
+    });
 }
+
 
 //  Supprimer une réservation
 function getDeleteBooking(idBooking) {
@@ -38,8 +84,8 @@ function getDeleteBooking(idBooking) {
 export default {
     getAllBooking,
     addBooking,
-    getUsers,
-    getSign,
-    getlogin,
-    getDeleteBooking
+    postSign,
+    postLogin,
+    getDeleteBooking,
+    getCsrfToken
 };

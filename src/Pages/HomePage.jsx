@@ -17,7 +17,7 @@ const HomePage = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      console.log("Scroll Position:", scrollPosition); // Vérifier la position
+     
       setIsScrolled(scrollPosition > 300);
       setIsVisible(scrollPosition > 300);
     };
