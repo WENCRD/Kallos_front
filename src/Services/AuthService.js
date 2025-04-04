@@ -6,7 +6,7 @@ const API_URL = "http://localhost:3000";
 
 // ✅ Récupère le token depuis sessionStorage (plus sécurisé)
 function getToken() {
-    return sessionStorage.getItem("token");
+    return localStorage.getItem("token");
 }
 
 // ✅ Ajoute le token aux requêtes Axios
@@ -21,13 +21,13 @@ function setAxiosToken() {
 
 // ✅ Enregistre le token après connexion
 function login(token) {
-    sessionStorage.setItem("token", token);
+    localStorage.setItem("token", token);
     setAxiosToken();
 }
 
 // ✅ Supprime le token après déconnexion
 function logout() {
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
     delete axios.defaults.headers.common["Authorization"];
 }
 

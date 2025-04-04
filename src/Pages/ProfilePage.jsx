@@ -1,72 +1,72 @@
 import React, { useContext, useState, useEffect } from "react";
-import AuthContext from "../Context/AuthContext";
+import AuthContext, { AuthProvider } from "../Context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import PhotographeService from "../Services/PhotographeService";
 import MannequinService from "../Services/MannequinService";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const ProfilePage = () => {
-  const { isAuthenticated } = useContext(AuthContext);
-  const navigate = useNavigate();
-  const [userData, setUserData] = useState(null);
-  const [profileData, setProfileData] = useState({});
-  const [selectedDays, setSelectedDays] = useState([]);
-  const [profilePhotos, setProfilePhotos] = useState([]);
+  const ProfilePage = () => {
+    const { isAuthenticated, user} = useContext(AuthContext);
+    const navigate = useNavigate();
+    const [userData, setUserData] = useState(null);
+    const [profileData, setProfileData] = useState({});
+    const [selectedDays, setSelectedDays] = useState([]);
+    const [profilePhotos, setProfilePhotos] = useState([]);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-    } else {
-      try {
-        const decoded = jwtDecode(token);
-        setUserData(decoded);
-        fetchUserProfile(decoded.id_user, decoded.type);
-      } catch (error) {
-        console.error("Erreur lors du décodage du token :", error);
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+      if (!token) {
         navigate("/login");
+      } else {
+        try {
+          const decoded = jwtDecode(token);
+          setUserData(decoded);
+          fetchUserProfile(decoded.id_user, decoded.type);
+        } catch (error) {
+          console.error("Erreur lors du décodage du token :", error);
+          navigate("/login");
+        }
       }
-    }
-  }, [navigate]);
+    }, [navigate]); // ✅ Ajout de navigate dans le tableau des dépendances
 
-  const fetchUserProfile = async (id_user, type) => {
-    try {
-      let response;
-      if (type === "mannequin") {
-        response = await MannequinService.getMannequin(id_user);
-      } else if (type === "photographe") {
-        response = await PhotographeService.getPhotographe(id_user);
+    const fetchUserProfile = async (id_user, type) => {
+      try {
+        let response;
+        if (type === "mannequin") {
+          response = await MannequinService.getMannequin(id_user);
+        } else if (type === "photographe") {
+          response = await PhotographeService.getPhotographe(id_user);
+        }
+        setProfileData(response.data);
+        setSelectedDays(response.data.availability || []);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données :", error);
       }
-      setProfileData(response.data);
-      setSelectedDays(response.data.availability || []);
-    } catch (error) {
-      console.error("Erreur lors de la récupération des données :", error);
-    }
-  };
+    };
 
-  const toggleDay = (day) => {
-    setSelectedDays((prevDays) =>
-      prevDays.includes(day) ? prevDays.filter((d) => d !== day) : [...prevDays, day]
-    );
-  };
+    const toggleDay = (day) => {
+      setSelectedDays((prevDays) =>
+        prevDays.includes(day) ? prevDays.filter((d) => d !== day) : [...prevDays, day]
+      );
+    };
 
-  const handleUploadPhoto = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePhotos((prevPhotos) => [...prevPhotos, reader.result]); 
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+    const handleUploadPhoto = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setProfilePhotos((prevPhotos) => [...prevPhotos, reader.result]); 
+        };
+        reader.readAsDataURL(file);
+      }
+    };
 
-  const handleDeletePhoto = (index) => {
-    setProfilePhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index)); 
-  };
+    const handleDeletePhoto = (index) => {
+      setProfilePhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index)); 
+    };
 
-  if (!userData) return <p>Chargement...</p>;
+    if (!userData) return <p>Chargement...</p>;
 
   return (
     <div className="my-container">

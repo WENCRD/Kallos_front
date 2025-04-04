@@ -1,4 +1,4 @@
-  import { useContext, useState } from 'react';
+  import { useContext, useEffect, useState } from 'react';
   import UsersService from '../Services/UsersService';
   import AuthContext from "../Context/AuthContext"; 
   import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@
 
   const LoginModal = ({ onClose, onSignUp }) => {
     const navigate = useNavigate();
-    const { setIsAuthenticated } = useContext(AuthContext);
+    const { login, isAuthenticated } = useContext(AuthContext);
     const [connect, setConnect] = useState({ email: '', password: '' });
     const [errorMessage, setErrorMessage] = useState(null);
     const [loading, setLoading] = useState(false); // État pour la gestion du chargement
@@ -14,41 +14,41 @@
     const handleSubmit = async (e) => {
       e.preventDefault();
       setErrorMessage(null);
-
-      // Vérification des champs vides
+  
       if (!connect.email || !connect.password) {
-        setErrorMessage("Veuillez remplir tous les champs.");
-        return;
+          setErrorMessage("Veuillez remplir tous les champs.");
+          return;
       }
-
-      setLoading(true); // Désactivation du bouton pendant la requête
-      console.log("Tentative de connexion avec :", connect);
-
+  
+      setLoading(true);
       try {
-        // Requête d'authentification
-        const response = await UsersService.postLogin(connect); // Vérifie que cette méthode existe
-
-        if (response?.data?.token) {
-          sessionStorage.setItem('token', response.data.token); // Stockage sécurisé du token
-          console.log('Connexion réussie', response);
-
-          setIsAuthenticated(true); // Changement de l'état d'authentification
-          onClose(); // Fermeture du modal
-          navigate('/'); // Redirection après connexion
-        } else {
-          setErrorMessage("Connexion échouée. Vérifiez vos identifiants.");
-        }
+          const response = await UsersService.postLogin(connect);
+          console.log("🔹 Réponse du serveur :", response);
+  
+          if (response?.data?.token) {
+              localStorage.setItem('token', response.data.token);
+              console.log("✅ Token stocké après connexion :", localStorage.getItem("token"));
+  
+              // ✅ Utilisation de login() pour gérer l'authentification
+              login({ token: response.data.token });
+  
+              // ✅ Redirection immédiate après la connexion réussie
+              navigate('/ProfilePage');
+          } else {
+              setErrorMessage("Connexion échouée. Vérifiez vos identifiants.");
+          }
       } catch (error) {
-        console.error("Erreur lors de la connexion :", error);
-        if (error.response) {
-          setErrorMessage(error.response.data?.message || "Identifiants incorrects.");
-        } else {
-          setErrorMessage("Problème de connexion au serveur.");
-        }
+          console.error("❌ Erreur lors de la connexion :", error);
+          if (error.response) {
+              setErrorMessage(error.response.data?.message || "Identifiants incorrects.");
+          } else {
+              setErrorMessage("Problème de connexion au serveur.");
+          }
       } finally {
-        setLoading(false); // Réactivation du bouton après la requête
+          setLoading(false);
       }
-    };
+  };
+  
 
   return (
     <div className="modal-overlay">

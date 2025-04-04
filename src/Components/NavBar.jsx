@@ -14,7 +14,6 @@ function NavBar() {
   const { isAuthenticated, setIsAuthenticated, setUsername } = useContext(AuthContext);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");  
-
   const [isScrolled, setIsScrolled] = useState(false);
   const [modalType, setModalType] = useState(null);
 
@@ -54,7 +53,7 @@ function NavBar() {
   
     try {
       const decoded = jwtDecode(token);
-      
+
       return decoded.username; // Retourne le nom d'utilisateur
     } catch (error) {
       console.error("Erreur lors du décodage du token:", error);

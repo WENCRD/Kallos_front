@@ -1,5 +1,4 @@
-import React, { createContext, useState } from "react";
-
+import React, { createContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
@@ -7,16 +6,28 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
-  //---------------Fonction pour se co----------------------
+  // ✅ Vérifie si l'utilisateur est déjà connecté
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  // ✅ Fonction login
   const login = (userData) => {
+    localStorage.setItem("token", userData.token);
     setIsAuthenticated(true);
-    setUsername(userData);
+    setUser(userData);
+    console.log("✅ Utilisateur connecté :", userData);
   };
 
-  //-----------------Fonction pour se déco------------------
+  // ✅ Fonction logout
   const logout = () => {
+    localStorage.removeItem("token");
     setIsAuthenticated(false);
     setUser(null);
+    console.log("🔹 Déconnexion réussie !");
   };
 
   return (

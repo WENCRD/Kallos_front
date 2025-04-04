@@ -9,8 +9,7 @@ const SignInModal = ({ children, onClose }) => {
     const [email, setemail] = useState("");
     const [password, setpassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [type, settype] = useState("");
-    
+    const [type, settype] = useState("");    
     const [first_name, setfirst_name] = useState("");
     const [last_name, setlast_name] = useState("");
     const [phone, setphone] = useState("");
@@ -18,43 +17,60 @@ const SignInModal = ({ children, onClose }) => {
     const [adress, setadress] = useState("");
     const [postal_code, setpostal_code] = useState("");
     const [date_of_birth, setdate_of_birth] = useState("");
-
     const [city, setcity] = useState("");
     const [username, setusername] = useState("");
 
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("📩 handleSubmit a bien été appelé !");
+    
+        // Assurer que tous les champs sont remplis avant de soumettre le formulaire
+        if (!email || !password || !username || !first_name || !last_name || !phone || !sex || !adress || !postal_code || !date_of_birth || !type || !city) {
+            alert("Tous les champs doivent être remplis !");
+            return;
+        }
 
         try {
-            const response = await UsersService.postSign({
-                email,
-                password,
-                first_name,
-                last_name,
-                phone,
-                sex,
-                adress,
-                postal_code,
-                date_of_birth,
-                type,
-                city,
-                username,
-            });
-            
-            console.log(response.data);
-            if (response.data) {
-                onClose();
-                navigate("/ProfilePage");
-            } else {
-                alert("Erreur lors de l'inscription. Réessayez !");
-            }
-        } catch (error) {
-            console.error("Erreur lors de la soumission :", error);
-            alert("Une erreur est survenue. Veuillez réessayer !");
-        }
-    };
+    const response = await UsersService.postSign({
+      email,
+      password,
+      username,
+      first_name,
+      last_name,
+      phone,
+      sex,
+      adress,
+      postal_code,
+      date_of_birth,
+      type,
+      city
+    });
 
+    if (response && response.token) {
+      // Sauvegarder le token JWT dans le localStorage
+      localStorage.setItem("token", response.token);
+
+      // Connecter l'utilisateur dans le contexte
+      login({
+        username: response.username,
+        token: response.token
+      });
+
+      // Redirection vers la page de profil
+      navigate("/ProfilePage");
+      onClose(); // Fermer le modal d'inscription
+    } else {
+      console.error("Erreur serveur : ", response?.message || "Erreur inconnue");
+      alert("Erreur lors de l'inscription. Réessayez !");
+    }
+  } catch (error) {
+    console.error("Erreur lors de la soumission :", error);
+    alert("Une erreur est survenue. Veuillez réessayer !");
+  }
+};
+
+    
+    
     const handleNext = () => setCurrentSection((prev) => prev + 1);
     const handlePrevious = () => setCurrentSection((prev) => Math.max(prev - 1, 1));
     return (

@@ -19,9 +19,6 @@ async function getCsrfToken() {
 // 🔹 Connexion d'un utilisateur
 async function postLogin(data) {
     const csrfToken = await getCsrfToken();
-    console.log("🚀 Token CSRF utilisé:", csrfToken);
-    console.log("📩 Données envoyées:", data);
-
     return axios.post("http://localhost:3000/users/LoginPage", {
         email: data.email,
         password: data.password // 🔹 Changer password_hash en password
@@ -31,7 +28,7 @@ async function postLogin(data) {
             "X-CSRF-Token": csrfToken
         },
         withCredentials: true
-    }).catch(err => {
+    }) .catch(err => {
         console.error("❌ Erreur login:", err.response?.data || err);
     });
 }
@@ -39,36 +36,44 @@ async function postLogin(data) {
 
 // 🔹 Inscription d'un utilisateur
 async function postSign(data) {
-    const csrfToken = await getCsrfToken();
-    console.log("🚀 Token CSRF utilisé:", csrfToken);
-    console.log("📩 Données envoyées pour inscription :", data);
+    try {
+        const csrfToken = await getCsrfToken();
+        const response = await axios.post("http://localhost:3000/users/SigninPage", {
+            email: data.email,
+            password: data.password, // 🔹 Vérifier que le backend attend bien `password`
+            username: data.username,
+            first_name: data.first_name,
+            last_name: data.last_name,
+            phone: data.phone,
+            sex: data.sex,
+            adress: data.adress,
+            postal_code: data.postal_code,
+            date_of_birth: data.date_of_birth,
+            type: data.type,
+            city: data.city
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": csrfToken
+            },
+            withCredentials: true
+        });
 
-    return axios.post("http://localhost:3000/users/SigninPage", {
-        email: data.email,
-        password: data.password, // 🔹 Vérifier que le backend attend bien `password`
-        username: data.username,
-        first_name: data.first_name,
-        last_name: data.last_name,
-        phone: data.phone,
-        sex: data.sex,
-        adress: data.adress,
-        postal_code: data.postal_code,
-        date_of_birth: data.date_of_birth,
-        type: data.type,
-        city: data.city
-    }, {
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": csrfToken
-        },
-        withCredentials: true
-    }).then(response => {
         console.log("✅ Réponse du serveur :", response.data);
-        return response.data;
-    }).catch(err => {
-        console.error("❌ Erreur inscription :", err.response?.data || err);
-    });
+        return response.data; // Retourner la réponse complète
+    } catch (err) {
+        // Vérifier si l'erreur vient de la réponse du serveur
+        if (err.response && err.response.data && err.response.data.errors) {
+            console.error("❌ Erreurs d'inscription :");
+            err.response.data.errors.forEach((error) => {
+                console.error(`- ${error.msg}`);
+            });
+        } else {
+            console.error("❌ Erreur inscription :", err.response?.data || err);
+        }
+    }
 }
+
 
 
 //  Supprimer une réservation

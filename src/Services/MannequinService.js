@@ -14,8 +14,8 @@ import axios from "axios";
 
 
     // Ajouter un mannequin
-    function addMannequin(id_User) {
-        return axios.post(`http://localhost:3000/mannequins/addMannequin/${id_User}`);
+    function addMannequin(id_User, mannequinData) {
+        return axios.post(`http://localhost:3000/mannequins/addMannequin/`,{id_user: id_User, ...mannequinData});
     }
 
 
