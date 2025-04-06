@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import UsersService from '../Services/UsersService';
+import UsersService from "../services/UsersService";
 import { useNavigate } from 'react-router-dom';
 
 const SignInModal = ({ children, onClose }) => {

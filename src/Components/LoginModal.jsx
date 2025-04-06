@@ -1,5 +1,5 @@
   import { useContext, useEffect, useState } from 'react';
-  import UsersService from '../Services/UsersService';
+  import UsersService from "../services/UsersService";
   import AuthContext from "../Context/AuthContext"; 
   import { useNavigate } from 'react-router-dom';
   import { Form } from 'react-bootstrap';

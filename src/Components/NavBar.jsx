@@ -95,6 +95,9 @@ function NavBar() {
                 <Link to="/mannequins" className="nav-link">
                   Mannequins
                 </Link>
+                <Link to="/photographes" className="nav-link">
+                Photographe
+                </Link>
               
 
               {/* Gestion de l'authentification */}

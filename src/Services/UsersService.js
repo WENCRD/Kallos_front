@@ -1,5 +1,14 @@
 import axios from "axios";
 
+function uploadProfilePicture(id_user, formData) {
+    return axios.post(`http://localhost:3000/users/uploadProfilePicture/${id_user}`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        withCredentials: true // Pour que CSRF et cookies passent
+    });
+}
+
 // Récupérer toutes les réservations
 function getAllBooking() {
     return axios.get(`http://localhost:3000/users/Booking/allBooking`);
@@ -92,5 +101,6 @@ export default {
     postSign,
     postLogin,
     getDeleteBooking,
-    getCsrfToken
+    getCsrfToken,
+    uploadProfilePicture
 };

@@ -8,7 +8,7 @@ const MannequinPage = () => {
   const [filteredMannequins, setFilteredMannequins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  
   const sectionRefs = {
     all: useRef(null),
     ethnicity: useRef(null),
@@ -55,14 +55,14 @@ const MannequinPage = () => {
           <p className="mt-4 max-w-2xl mx-auto text-lg">
             Une plateforme innovante pour mannequins et photographes.
           </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-4">
+          <div className=" button-container  mt-6 flex flex-wrap justify-center gap-4">
             <button
-              className="btnhp px-6 py-2 bg-white text-black rounded-lg"
-              onClick={() => console.log("Naviguer vers mannequins")}
+              className="btnhp px-6 py-2 text-gray-700 hover:text-black transition"
+              onClick={() => navigate('/mannequins')}
             >
               MANNEQUINS
             </button>
-            <button className="btnhp px-6 py-2 bg-white text-black rounded-lg">
+            <button className="btnhp px-6 py-2 text-gray-700 hover:text-black transition">
               PHOTOGRAPHES
             </button>
           </div>
@@ -70,48 +70,47 @@ const MannequinPage = () => {
       </header>
 
       {/* Bande blanche avec boutons */}
-      <div className="boutons-filtrage">
-        <div className="flex justify-center gap-8">
-          <button
-            onClick={() => filterMannequins("all")}
-            className="btnhp px-6 py-2 bg-white text-black rounded-lg"
-          >
-            TOUS
-          </button>
-          <button
-            onClick={() => filterMannequins("ethnicity")}
-            className="btnhp px-6 py-2 bg-white text-black rounded-lg"
-          >
-            ETHNIE
-          </button>
-          <button
-            onClick={() => filterMannequins("sex")}
-            className="btnhp px-6 py-2 bg-white text-black rounded-lg"
-          >
-            SEXE
-          </button>
-          <button
-            onClick={() => filterMannequins("type")}
-            className="btnhp px-6 py-2 bg-white text-black rounded-lg"
-          >
-            TYPE
-          </button>
-        </div>
-      </div>
+<div className="boutons-filtrage w-full flex justify-center text-center mt-6">
+  <div className="flex justify-center items-center gap-8 w-full">
+    <button
+      onClick={() => filterMannequins('all')}
+      className="btnhp px-6 py-2 text-gray-700 hover:text-black transition">
+      TOUS
+    </button>
+    <button
+      onClick={() => filterMannequins('ethnicity')}
+      className="btnhp px-6 py-2 text-gray-700 hover:text-black transition">
+      ETHNIE
+    </button>
+    <button
+      onClick={() => filterMannequins('sex')}
+      className="btnhp px-6 py-2 text-gray-700 hover:text-black transition">
+      SEXE
+    </button>
+    <button
+      onClick={() => filterMannequins('type')}
+      className="btnhp px-6 py-2 text-gray-700 hover:text-black transition">
+      TYPE
+    </button>
+  </div>
+</div>
 
       {/* Liste filtrée des mannequins */}
+     
       <div className="mannequin-list">
         {filteredMannequins.length > 0 ? (
           filteredMannequins.map((mannequin) => (
             <div className="mannequin-card" key={mannequin.id_mannequin}>
               <MannequinCard mannequin={mannequin} />
             </div>
+            
           ))
         ) : (
           <p className="text-center text-gray-500 w-full">
             Aucun mannequin trouvé.
           </p>
         )}
+      
       </div>
     </div>
   );
