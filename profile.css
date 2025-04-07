@@ -43,39 +43,36 @@
   margin-top: 80px; /* Descend la section plus bas */
 }
 
-/* Responsive */
+/* Réactivité */
 @media (max-width: 768px) {
   .profile-sections {
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .profile-picture-container {
-      display: flex;
-      justify-content: center;
-      width: 100%;
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 
   .profile-picture {
-      width: 100px;
-      height: 100px;
-      margin: 1px; /* Centre aussi sur mobile */
+    width: 100px;
+    height: 100px;
+    margin: 1px; /* Centre aussi sur mobile */
   }
 }
 
 @media (max-width: 480px) {
   .profile-picture {
-      width: 80px;
-      height: 80px;
+    width: 80px;
+    height: 80px;
   }
 }
 
+/* ✅ Style pour chaque carte mannequin */
 
-  
-  
-  /* ✅ Style pour chaque carte mannequin */
-  
 /* Conteneur de la liste */
 .mannequin-list {
   display: flex;
@@ -103,83 +100,136 @@
 /* ✅ Responsive : Ajustement sur les petits écrans */
 @media (max-width: 768px) {
   .mannequin-list {
-      flex-direction: column; /* Passe les cartes en colonne sur mobile */
-      align-items: center; /* Centre les cartes */
-      gap: 15px;
+    flex-direction: column; /* Passe les cartes en colonne sur mobile */
+    align-items: center; /* Centre les cartes */
+    gap: 15px;
   }
 }
 
-  /* disponibilité */
-  
-  .availability {
-    border-radius: 10px; /* Bordure plus arrondie */
-    overflow: hidden; /* Évite que le contenu déborde */
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Ombre plus fluide */
-       margin-top: 20px;
-  }
-  
+/* disponibilité */
 
-  /* Organisation des boutons en grille */
+.availability {
+  border-radius: 10px; /* Bordure plus arrondie */
+  overflow: hidden; /* Évite que le contenu déborde */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Ombre plus fluide */
+  margin-top: 20px;
+}
+
+/* Organisation des boutons en grille */
+.availability-days {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 boutons par ligne */
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 0 30px; /* Ajoute un espace sur les côtés */
+}
+
+/* Boutons stylisés */
+.availability-days button {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.3s;
+  font-size: 1rem;
+}
+
+/* Bouton actif */
+.availability-days button.active {
+  background: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+/* Effet au survol */
+.availability-days button:hover {
+  background: #ddd;
+}
+
+/* --- Assurer que les boutons restent par deux sur mobile --- */
+@media (max-width: 768px) {
   .availability-days {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 boutons par ligne */
-    justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    padding: 0 30px; /* Ajoute un espace sur les côtés */
+    grid-template-columns: repeat(2, 1fr); /* Force l'affichage par 2 sur mobile */
+    gap: 5px; /* Espacement réduit */
+    padding: 0 20px; /* Ajustement du padding */
   }
-  
-  /* Boutons stylisés */
+
   .availability-days button {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    background: white;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: 0.3s;
-    font-size: 1rem;
+    width: 100%; /* Les boutons prennent toute la largeur */
+    font-size: 0.9rem;
   }
-  
-  /* Bouton actif */
-  .availability-days button.active {
-    background: #28a745;
-    color: white;
-    border-color: #28a745;
+}
+
+/* --- Dernier bouton prend toute la ligne --- */
+.availability-days button:last-child {
+  grid-column: span 2; /* Sur écran large ET mobile */
+}
+
+.btnr {
+  border: none;
+  padding: 12px 24px; /* Meilleure ergonomie */
+  font-size: 1.2rem;
+  background: rgb(204, 0, 0);
+  color: black;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+/* ** Ajout de flexbox dans .grid-sections pour une meilleure gestion des colonnes */
+/* Grille des sections */
+.grid-sections {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colonnes pour les grands écrans */
+  gap: 30px; /* Augmenter l'espacement entre les sections */
+  margin-bottom: 40px; /* Plus d'espace sous la grille des sections */
+  width: 100%;
+}
+
+/* Sections individuelles */
+.section-box {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px; /* Espacement plus important sous chaque section */
+}
+
+/* Titres et textes des sections */
+.section-box h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.section-box p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* Réactivité : Grille sur petit écran */
+@media (max-width: 768px) {
+  .grid-sections {
+    grid-template-columns: 1fr; /* Sur les petits écrans, les sections deviennent une seule colonne */
   }
-  
-  /* Effet au survol */
-  .availability-days button:hover {
-    background: #ddd;
+
+  .availability {
+    margin-top: 20px; /* Espacement plus important sous les sections */
   }
-  
-  /* --- Assurer que les boutons restent par deux sur mobile --- */
-  @media (max-width: 768px) {
-    .availability-days {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr); /* Force l'affichage par 2 sur mobile */
-      gap: 5px; /* Espacement réduit */
-      padding: 0 20px; /* Ajustement du padding */
-    }
-  
-    .availability-days button {
-      width: 100%; /* Les boutons prennent toute la largeur */
-      font-size: 0.9rem;
-    }
+
+  /* Ajustement des photos sur les petits écrans */
+  .grid-photos {
+    grid-template-columns: 1fr 1fr;
   }
-  
-  /* --- Dernier bouton prend toute la ligne --- */
-  .availability-days button:last-child {
-    grid-column: span 2; /* Sur écran large ET mobile */
+
+  /* Ajustement des boutons de disponibilité */
+  .availability button {
+    font-size: 14px;
+    padding: 8px;
   }
-  
-  .btnr {
-    border: none;
-    padding: 12px 24px; /* Meilleure ergonomie */
-    font-size: 1.2rem;
-    background: rgb(204, 0, 0);
-    color: black;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-  }
+}
+

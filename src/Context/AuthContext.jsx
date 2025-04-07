@@ -38,6 +38,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     console.log("🔹 Déconnexion réussie !");
   };
+  
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
