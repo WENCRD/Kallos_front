@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import MannequinCard from "../Components/MannequinCard";
 import mannequinService from "../Services/MannequinService";
-import "../MannequinPcss.css"; // Importation des styles CSS
+import "../allMetP.css"; // Importation des styles CSS
 
 const MannequinPage = () => {
   const [mannequins, setMannequins] = useState([]);

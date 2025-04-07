@@ -1,0 +1,44 @@
+.admin-container {
+    padding: 40px;
+  }
+  
+  .user-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+  }
+  
+  .user-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 0 10px #ccc;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .user-avatar {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+  }
+  
+  .card-actions button {
+    margin: 5px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-edit {
+    background: #007bff;
+    color: white;
+  }
+  
+  .btn-delete {
+    background: #dc3545;
+    color: white;
+  }
+  

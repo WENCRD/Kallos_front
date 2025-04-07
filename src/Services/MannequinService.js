@@ -4,7 +4,8 @@ import axios from "axios";
 
     // Modifier les infos d'un mannequin
     function  getAllMannequins() {
-        return axios.get(`http://localhost:3000/mannequins/all`);
+        return axios.get(`http://localhost:3000/mannequins/all`,);
+        
     }
 
     // Modifier les infos d'un mannequin

@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import { useNavigate } from "react-router-dom"; // ✅ Ajout de la navigation
+import { useNavigate } from "react-router-dom"; 
 import "/modale.css";
 const HomePage = () => {
   const navigate = useNavigate();
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const sectionRefs = {
     pourquoi: useRef(null),

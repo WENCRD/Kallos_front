@@ -1,12 +1,12 @@
-  import { useContext, useEffect, useState } from 'react';
-  import UsersService from "../services/UsersService";
+  import { useContext, useState } from 'react';
+  import UsersService from "../Services/UsersService.js";
   import AuthContext from "../Context/AuthContext"; 
   import { useNavigate } from 'react-router-dom';
   import { Form } from 'react-bootstrap';
 
   const LoginModal = ({ onClose, onSignUp }) => {
     const navigate = useNavigate();
-    const { login, isAuthenticated } = useContext(AuthContext);
+    const { login } = useContext(AuthContext);
     const [connect, setConnect] = useState({ email: '', password: '' });
     const [errorMessage, setErrorMessage] = useState(null);
     const [loading, setLoading] = useState(false); // État pour la gestion du chargement

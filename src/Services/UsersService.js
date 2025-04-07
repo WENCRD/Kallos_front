@@ -1,5 +1,25 @@
 import axios from "axios";
 
+
+// 🔹 Récupérer un utilisateur par ID
+function getUserById(id_user) {
+    return axios.get(`http://localhost:3000/users/user/${id_user}`, {
+        withCredentials: true
+    });
+}
+
+// 🔹 Modifier un utilisateur
+async function updateUser(id_user, updatedData) {
+    const csrfToken = await getCsrfToken();
+    return axios.put(`http://localhost:3000/users/updateUser/${id_user}`, updatedData, {
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken
+        },
+        withCredentials: true
+    });
+}
+
 function uploadProfilePicture(id_user, formData) {
     return axios.post(`http://localhost:3000/users/uploadProfilePicture/${id_user}`, formData, {
         headers: {
@@ -9,15 +29,6 @@ function uploadProfilePicture(id_user, formData) {
     });
 }
 
-// Récupérer toutes les réservations
-function getAllBooking() {
-    return axios.get(`http://localhost:3000/users/Booking/allBooking`);
-}
-
-//  Ajouter une réservation
-function addBooking(booking) {
-    return axios.post(`http://localhost:3000/users/Booking/addBooking`, booking);
-}
 
 // ✅ Vérifie que getCsrfToken est défini UNE SEULE FOIS
 async function getCsrfToken() {
@@ -49,7 +60,7 @@ async function postSign(data) {
         const csrfToken = await getCsrfToken();
         const response = await axios.post("http://localhost:3000/users/SigninPage", {
             email: data.email,
-            password: data.password, // 🔹 Vérifier que le backend attend bien `password`
+            password: data.password, 
             username: data.username,
             first_name: data.first_name,
             last_name: data.last_name,
@@ -84,23 +95,31 @@ async function postSign(data) {
 }
 
 
-
-//  Supprimer une réservation
-function getDeleteBooking(idBooking) {
-    return axios.get(`http://localhost:3000/users/Booking/deleteBooking/${idBooking}`);
-}
-
-
-
-
+// 🔹 Récupérer tous les utilisateurs (pour la page admin)
+function getAllUsers() {
+    return axios.get("http://localhost:3000/users/allUsers");
+  }
+  
+  // 🔹 Supprimer un utilisateur (requiert d’être admin + token)
+  function deleteUser(id_user) {
+    const token = localStorage.getItem("token");
+    return axios.delete(`http://localhost:3000/users/deleteUser/${id_user}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    });
+  }
+  
 
 //  Export des fonctions
 export default {
-    getAllBooking,
-    addBooking,
     postSign,
     postLogin,
-    getDeleteBooking,
     getCsrfToken,
-    uploadProfilePicture
+    uploadProfilePicture,
+    getAllUsers,
+    deleteUser,
+    updateUser,
+    getUserById
 };

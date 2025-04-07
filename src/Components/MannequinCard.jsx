@@ -19,7 +19,7 @@ const MannequinCard = ({ mannequin }) => {
           alt={`Photo de ${mannequin.username || 'ce mannequin'}`}
         />
         <Card.Body>
-          <Card.Title>{mannequin.name || "Nom inconnu"}</Card.Title>
+          <Card.Title>{mannequin.username || "Nom inconnu"}</Card.Title>
           <Card.Text>
             <strong>Taille :</strong> {mannequin.height} cm <br />
             <strong>Yeux :</strong> {mannequin.eye_color} <br />
