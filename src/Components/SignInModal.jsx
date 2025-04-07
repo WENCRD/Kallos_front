@@ -23,51 +23,55 @@ const SignInModal = ({ children, onClose }) => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
-        // Assurer que tous les champs sont remplis avant de soumettre le formulaire
-        if (!email || !password || !username || !first_name || !last_name || !phone || !sex || !adress || !postal_code || !date_of_birth || !type || !city) {
-            alert("Tous les champs doivent être remplis !");
-            return;
+      
+        if (
+          !email || !password || !username || !first_name || !last_name ||
+          !phone || !sex || !adress || !postal_code || !date_of_birth || !type || !city
+        ) {
+          alert("Tous les champs doivent être remplis !");
+          return;
         }
-
+      
         try {
-    const response = await UsersService.postSign({
-      email,
-      password,
-      username,
-      first_name,
-      last_name,
-      phone,
-      sex,
-      adress,
-      postal_code,
-      date_of_birth,
-      type,
-      city
-    });
-
-    if (response && response.token) {
-      // Sauvegarder le token JWT dans le localStorage
-      localStorage.setItem("token", response.token);
-
-      // Connecter l'utilisateur dans le contexte
-      login({
-        username: response.username,
-        token: response.token
-      });
-
-      // Redirection vers la page de profil
-      navigate("/ProfilePage");
-      onClose(); // Fermer le modal d'inscription
-    } else {
-      console.error("Erreur serveur : ", response?.message || "Erreur inconnue");
-      alert("Erreur lors de l'inscription. Réessayez !");
-    }
-  } catch (error) {
-    console.error("Erreur lors de la soumission :", error);
-    alert("Une erreur est survenue. Veuillez réessayer !");
-  }
-};
+          const response = await UsersService.postSign({
+            email,
+            password,
+            username,
+            first_name,
+            last_name,
+            phone,
+            sex,
+            adress,
+            postal_code,
+            date_of_birth,
+            type,
+            city,
+            bio: "", // facultatif
+            profile_picture: "" // facultatif
+          });
+      
+          console.log("✅ Réponse postSign :", response);
+      
+          if (response?.token) {
+            localStorage.setItem("token", response.token);
+      
+            login({
+              token: response.token,
+              username: response.user?.username || ""
+            });
+      
+            alert(response.message || "Inscription réussie !");
+            navigate("/ProfilePage");
+            onClose();
+          } else {
+            alert("Inscription réussie mais sans retour de token.");
+          }
+        } catch (error) {
+          console.error("❌ Erreur lors de l'inscription :", error);
+          alert("Une erreur est survenue. Veuillez réessayer !");
+        }
+      };
+      
 
     
     

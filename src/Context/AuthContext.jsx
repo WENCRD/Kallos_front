@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode"; // 👈 à installer si pas encore fait
 
 const AuthContext = createContext();
 
@@ -6,23 +7,31 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
-  // ✅ Vérifie si l'utilisateur est déjà connecté
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
-      setIsAuthenticated(true);
+      try {
+        const decoded = jwtDecode(storedToken);
+        setUser(decoded); // 👈 on restaure les infos utilisateur
+        setIsAuthenticated(true);
+        console.log("🔁 Session restaurée :", decoded);
+      } catch (error) {
+        console.error("❌ Erreur lors du décodage du token :", error);
+        localStorage.removeItem("token"); // Si le token est corrompu
+        setIsAuthenticated(false);
+        setUser(null);
+      }
     }
   }, []);
 
-  // ✅ Fonction login
   const login = (userData) => {
     localStorage.setItem("token", userData.token);
+    const decoded = jwtDecode(userData.token);
     setIsAuthenticated(true);
-    setUser(userData);
-    console.log("✅ Utilisateur connecté :", userData);
+    setUser(decoded);
+    console.log("✅ Utilisateur connecté :", decoded);
   };
 
-  // ✅ Fonction logout
   const logout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);

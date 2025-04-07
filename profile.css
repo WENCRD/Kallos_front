@@ -173,3 +173,13 @@
     grid-column: span 2; /* Sur écran large ET mobile */
   }
   
+  .btnr {
+    border: none;
+    padding: 12px 24px; /* Meilleure ergonomie */
+    font-size: 1.2rem;
+    background: rgb(204, 0, 0);
+    color: black;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }

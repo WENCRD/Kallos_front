@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import PhotographerService from "../Services/PhotographerService";
 import MannequinService from "../Services/MannequinService";
+import UsersService from "../Services/UsersService.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "/profile.css";
 
@@ -127,7 +128,20 @@ const ProfilePage = () => {
   };
 
   if (!userData) return <p>Chargement...</p>;
-
+  const handleDeleteAccount = async () => {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
+      try {
+        await UsersService.deleteUser(userData.id_user); // Utilise bien l'id du user connecté
+        alert("Compte supprimé avec succès.");
+        localStorage.removeItem("token"); // Déconnecte l'utilisateur
+        navigate("/"); // Redirige vers l'accueil
+      } catch (error) {
+        console.error("Erreur lors de la suppression du compte :", error);
+        alert("Une erreur est survenue lors de la suppression.");
+      }
+    }
+  };
+  
   return (
     <div  className="min-h-screen bg-gray-100">
  <header className="relative w-full flex flex-col items-center justify-center text-center bg-cover bg-center img">
@@ -234,8 +248,14 @@ const ProfilePage = () => {
     </div>
   )}
 </div>
-<div className="h-20"></div>
+<button
+  className="btnr mt-4"
+  onClick={handleDeleteAccount}
+>
+  Supprimer mon compte
+</button>
     </div>
+    
     </div>
   );
 };
